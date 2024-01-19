@@ -6,10 +6,10 @@ class Plusterm
 public:
 	void start();
 private:
-	const std::string plusterm_version{ "0.3.102" };
+	const std::string plusterm_version{ "0.16.2" };
 
 #ifdef DEBUG
-	const std::string plusterm_version_channel{ "DEV_CANARY" };
+	const std::string plusterm_version_channel{ "DEV_DEBUG" };
 #else
 	const std::string plusterm_version_channel{ "RTL_CANARY" };
 #endif
