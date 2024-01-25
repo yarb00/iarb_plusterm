@@ -19,7 +19,7 @@ void Plusterm::plusterm_main()
 	setlocale(LC_ALL, "ru-RU");
 	system("chcp 1251 > nul 2>&1");
 
-	set_color("output_default");
+	this->set_static_color("output_default");
 
 	system("title PlusTerm");
 
@@ -29,13 +29,13 @@ void Plusterm::plusterm_main()
 
 	for (int i{ 0 }; true; i++)
 	{
-		std::string user_input{}, user_input_command{}, user_input_text{}, plusterm_workspace{ "main" };
+		std::string user_input{}, user_input_command{}, user_input_text{};
 
 		std::cout << std::endl;
 
-		this->set_color("input_default");
+		this->set_static_color("input_default");
 
-		std::cout << "`PLUSTERM/" << plusterm_workspace << "` |>>> ";
+		std::cout << "PT |>>> ";
 		std::getline(std::cin, user_input);
 
 		//
@@ -67,118 +67,116 @@ void Plusterm::plusterm_main()
 	system("exit");
 }
 
-void Plusterm::run(std::string _user_input_command, std::string _user_input_text)
+void Plusterm::run(std::string _command, std::string _text)
 {
-	const std::string *command_address{ &_user_input_command }, *text_address{ &_user_input_text }, command{ *command_address }, text{ *text_address };
+	this->set_static_color("output_default");
 
-	this->set_color("output_default");
-
-	if (command == "" || command == "_plusterm?empty_")
+	if (_command == "" || _command == "_plusterm?empty_")
 	{
 		//nothing
 	}
-	else if (command == "_plusterm?undefined_")
+	else if (_command == "_plusterm?undefined_")
 	{
-		this->info("error", command, command);
+		this->info("error", _command, _command);
 	}
-	else if (command == "exit" || command == "quit")
+	else if (_command == "exit" || _command == "quit")
 	{
 		system("cls");
 		system("exit");
 		is_exit = true;
 	}
-	else if (command == "help" || command == "?")
+	else if (_command == "help" || _command == "?")
 	{
-		if (text != "")
+		if (_text != "")
 		{
-			this->info("warning", "Команда help не принимает параметров", command);
+			this->info("warning", "Команда help не принимает параметров", _command);
 		}
 		std::cout << "Список команд:" << std::endl << std::endl;
 		std::cout << "команда [опции] (параметры) ||| Описание" << std::endl << "Доступные опции: доступная опция комманды ; ещё одна доступная опция комманды" << std::endl << "Пример: пример комманды ; другой пример комманды" << std::endl << std::endl;
 		this->help();
 	}
-	else if (command == "clear" || command == "cls")
+	else if (_command == "clear" || _command == "cls")
 	{
 		system("cls");
-		this->set_color("output_default");
+		this->set_static_color("output_default");
 		this->print_title();
 	}
-	else if (command == "print" || command == "say")
+	else if (_command == "print" || _command == "say")
 	{
-		if (text != "")
+		if (_text != "")
 		{
-			std::cout << text << std::endl;
+			std::cout << _text << std::endl;
 		}
 		else
 		{
-			this->info("error", "Вы не ввели не какого текста для вывода", command);
+			this->info("error", "Вы не ввели не какого текста для вывода", _command);
 		}
 	}
-	else if (command == "get_date" || command == "date")
+	else if (_command == "get_date" || _command == "date")
 	{
-		if (text != "")
+		if (_text != "")
 		{
-			this->info("warning", "Команда get_date не принимает параметров", command);
+			this->info("warning", "Команда get_date не принимает параметров", _command);
 		}
 		system("echo %date%");
 	}
-	else if (command == "get_time" || command == "time")
+	else if (_command == "get_time" || _command == "time")
 	{
-		if (text != "")
+		if (_text != "")
 		{
-			this->info("warning", "Команда get_time не принимает параметров", command);
+			this->info("warning", "Команда get_time не принимает параметров", _command);
 		}
 		system("echo %time%");
 	}
-	else if (command == "square_root" || command == "sqrt")
+	else if (_command == "square_root" || _command == "sqrt")
 	{
 		/*
 		char pStr[]{ 0 };
-		for (int i{ 0 }; i < command.length(); i++)
+		for (int i{ 0 }; i < _command.length(); i++)
 		{
-			pStr[i] = command[i];
+			pStr[i] = _command[i];
 		}
 		for (int i = 0; i < strlen(pStr); i++)
 		{
 			if (!isdigit(pStr[i]))
 			{
-				this->info("error", "То, что вы ввели - не число", command);
+				this->info("error", "То, что вы ввели - не число", _command);
 			}
-			else if (i == command.length() - 1 && isdigit(pStr[i]))
+			else if (i == _command.length() - 1 && isdigit(pStr[i]))
 			{
-				std::cout << "Квадратный корень из " << text << ": " << sqrt(std::stoi(text)) << std::endl;
+				std::cout << "Квадратный корень из " << _text << ": " << sqrt(std::stoi(_text)) << std::endl;
 			}
 		}
 		*/
 
-		if (text != "")
+		if (_text != "")
 		{
-			std::cout << "Квадратный корень из " << text << ": " << sqrt(std::stoi(text)) << std::endl;
+			std::cout << "Квадратный корень из " << _text << ": " << sqrt(std::stoi(_text)) << std::endl;
 		}
 		else
 		{
-			this->info("error", "Вы не ввели число", command);
+			this->info("error", "Вы не ввели число", _command);
 		}
 	}
-	else if (command == "version" || command == "ver")
+	else if (_command == "version" || _command == "ver")
 	{
-		if (text != "")
+		if (_text != "")
 		{
-			this->info("warning", "Команда plusterm_version не принимает параметров", command);
+			this->info("warning", "Команда plusterm_version не принимает параметров", _command);
 		}
 		print_title("version");
 	}
-	else if (command == "cmd")
+	else if (_command == "cmd")
 	{
-		if (text != "")
+		if (_text != "")
 		{
-			this->info("info", "Отправляем комманду в CMD...", command);
+			this->info("info", "Отправляем комманду в CMD...", _command);
 			std::cout << std::endl;
 
-			system(text.c_str());
+			system(_text.c_str());
 
 			std::cout << std::endl;
-			this->info("info", "Команда CMD выполнена!", command);
+			this->info("info", "Команда CMD выполнена!", _command);
 		}
 		else
 		{
@@ -188,23 +186,35 @@ void Plusterm::run(std::string _user_input_command, std::string _user_input_text
 			system("cmd");
 		}
 	}
-	else if (command == "plusterm" || command == "pt")
+	/*else if (_command == "plusterm" || _command == "pt")
 	{
-		if (text.find("/*") != std::string::npos)
+		if (_text.find("/*") != std::string::npos)
 		{
 			system("iarb_plusterm.exe");
 		}
 		else
 		{
-			this->info("warning", "Похоже, что экзэмпляр PlusTerm уже запущен. Если вы всё равно хотите запустить ещё один экзэмпляр PlusTerm поверх этого, выполните комманду с параметром /*", command);
+			this->info("warning", "Похоже, что экзэмпляр PlusTerm уже запущен. Если вы всё равно хотите запустить ещё один экзэмпляр PlusTerm поверх этого, выполните комманду с параметром /*", _command);
 		}
-	}
-	else if (command == "about")
+	}*/
+	else if (_command == "about")
 	{
-		set_color("title_name");
+		this->set_static_color("title_name");
 		std::cout << "PlusTerm";
-		set_color("output_default");
+		this->set_static_color("output_default");
 		std::cout << std::endl << "Автор PlusTerm`a - yarb00." << std::endl << "Discord: @yarb00" << std::endl << "Telegram: @yarb000" << std::endl;
+	}
+	else if (_command == "web")
+	{
+		if (_text != "")
+		{
+			std::string com_{ "start https://\"" + _text + "\"" };
+			system(com_.c_str());
+		}
+		else
+		{
+			system("start https://\"github.com/yarb00\"");
+		}
 	}
 	else
 	{
@@ -222,19 +232,20 @@ void Plusterm::help()
 	std::cout << "date ||| Вывести текущую дату на экран" << std::endl << "Доступные опции: нет" << std::endl << "Пример: date" << std::endl << std::endl;
 	std::cout << "time ||| Вывести текущее время на экран" << std::endl << "Доступные опции: нет" << std::endl << "Пример: time" << std::endl << std::endl;
 	std::cout << "sqrt (число) ||| Вывести квадратный корень из числа на экран" << std::endl << "Доступные опции: нет" << std::endl << "Пример: sqrt 9" << std::endl << std::endl;
-	std::cout << "pt_ver ||| Вывести версию PlusTerm на экран" << std::endl << "Доступные опции: нет" << std::endl << "Пример: pt_ver" << std::endl << std::endl;
+	std::cout << "ver ||| Вывести версию PlusTerm на экран" << std::endl << "Доступные опции: нет" << std::endl << "Пример: pt_ver" << std::endl << std::endl;
 	std::cout << "cmd (команда CMD) ||| Выполнить команду CMD из параметра, или, без параметров запустить сеанс CMD (классической командной строки)" << std::endl << "Доступные опции: нет" << std::endl << "Пример: cmd ; cmd echo Hello, world!" << std::endl << std::endl;
-	std::cout << "pt [опции] ||| Запустить экзэмпляр PlusTerm" << std::endl << "Доступные опции: /* - подтвердить запуск" << std::endl << "Пример: pt ; pt /*" << std::endl << std::endl;
+	//std::cout << "pt [опции] ||| Запустить экзэмпляр PlusTerm" << std::endl << "Доступные опции: /* - подтвердить запуск" << std::endl << "Пример: pt ; pt /*" << std::endl << std::endl;
 	std::cout << "about ||| О Plusterm и его авторе" << std::endl << "Доступные опции: нет" << std::endl << "Пример: about" << std::endl << std::endl;
+	std::cout << "web (адрес сайта без протокола https) ||| Открывает сайт в браузере по умолчанию" << std::endl << "Доступные опции: нет" << std::endl << "Пример: web google.com" << std::endl << std::endl;
 }
 
 void Plusterm::print_title(std::string _mode)
 {
 	if (_mode == "title")
 	{
-		set_color("title_name");
+		set_static_color("title_name");
 		std::cout << "PlusTerm";
-		set_color("output_default");
+		set_static_color("output_default");
 		std::cout << std::endl << "от yarb00\t(подробнее: \"about\")" << std::endl << std::endl << "ВЕРСИЯ { |" << this->plusterm_version << "| }" << std::endl << std::endl << "-----" << std::endl;
 	}
 	else if (_mode == "version")
@@ -247,24 +258,34 @@ void Plusterm::info(std::string _info_level, std::string _info_text, std::string
 {
 	if (_info_level == "error")
 	{
-		this->set_color("output_error");
+		this->set_static_color("output_error");
 		std::cout << "ОШИБКА [" << _input_command << "   /   " << _info_text << "] !" << std::endl;
 	}
 	else if (_info_level == "warning")
 	{
-		this->set_color("output_warning");
+		this->set_static_color("output_warning");
 		std::cout << "ПРЕДУПРЕЖДЕНИЕ [" << _input_command << "   /   " << _info_text << "] !" << std::endl;
 	}
 	else if (_info_level == "info")
 	{
-		this->set_color("light_blue");
+		this->set_static_color("light_blue");
 		std::cout << "СООБЩЕНИЕ [" << _input_command << "   /   " << _info_text << "] !" << std::endl;
 	}
 
-	set_color();
+	set_static_color();
 }
 
-void Plusterm::set_color(std::string _color_mode)
+//in developing, doesn't work now. use set_static_color() instead
+template<int txt = 7, int bg = 0>
+std::ostream& set_color(std::ostream& _text)
+{
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (WORD)((bg << 4) | txt));
+	return _text;
+}
+//
+
+void Plusterm::set_static_color(std::string _color_mode)
 {
 	int _text_color{}, _background_color{ 1 };
 
@@ -295,7 +316,6 @@ void Plusterm::set_color(std::string _color_mode)
 	}
 
 	//
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdOut, (WORD)((_background_color << 4) | _text_color));
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((_background_color << 4) | _text_color));
 	//
 }
